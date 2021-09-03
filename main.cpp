@@ -85,7 +85,7 @@ void PlayerTurn()
     }
 
     // floor((n-1)/3) returns row index, (n+2)%3 returns column index
-    char &box{g_board[(box_position - 1) / 3][(box_position + 2) % 3]};
+    char box{g_board[(box_position - 1) / 3][(box_position + 2) % 3]};
 
     // check if box is empty
     while (box == 'X' || box == 'O')
@@ -96,10 +96,12 @@ void PlayerTurn()
         std::cin >> box_position;
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        box = g_board[(box_position - 1) / 3][(box_position + 2) % 3];
     }
 
     // updates box
-    box = g_turn;
+    g_board[(box_position - 1) / 3][(box_position + 2) % 3] = g_turn;
 
     if (GetWinner() != 'N')
         g_game_over = true;

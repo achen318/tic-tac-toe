@@ -20,5 +20,10 @@ public:
 
 private:
     Ui::TicTacToe *ui;
+
+private slots:
+    void BoxPressed();
+    char GetWinner();
 };
+
 #endif // TICTACTOE_H

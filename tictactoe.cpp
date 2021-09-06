@@ -13,6 +13,8 @@ bool g_game_over{false};
 
 int g_x_score{0};
 int g_o_score{0};
+
+QPushButton *g_boxes[9];
 // ============================
 
 TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
@@ -23,9 +25,11 @@ TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
     for (int i{0}; i < 9; ++i)
     {
         const QString kButtonName{"pushButton_" + QString::number(i + 1)};
-        const QPushButton *kButton{TicTacToe::findChild<QPushButton *>(kButtonName)};
-        connect(kButton, SIGNAL(released()), this, SLOT(BoxPressed()));
+        g_boxes[i] = TicTacToe::findChild<QPushButton *>(kButtonName);
+        connect(g_boxes[i], SIGNAL(released()), this, SLOT(BoxPressed()));
     }
+
+    connect(ui->newGameButton, SIGNAL(released()), this, SLOT(NewGame()));
 }
 
 TicTacToe::~TicTacToe()
@@ -121,4 +125,22 @@ char TicTacToe::GetWinner()
 
     // There are no winners, end the game in a draw
     return 'D';
+}
+
+void TicTacToe::NewGame()
+{
+    for (QPushButton *box : g_boxes)
+    {
+        box->setText("");
+    }
+
+    for (int i{0}; i < 9; ++i)
+    {
+        g_board[i] = ' ';
+    }
+
+    ui->turnLabel->setText("It is currently X's turn!");
+    g_turn = 'X';
+
+    g_game_over = false;
 }

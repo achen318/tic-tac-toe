@@ -1,4 +1,4 @@
-#include "tictactoe.h"
+#include "include/tictactoe.h"
 
 #include <QApplication>
 

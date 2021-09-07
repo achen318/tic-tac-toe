@@ -1,11 +1,14 @@
-#include "tictactoe.h"
+#include "include/tictactoe.h"
 #include "ui_tictactoe.h"
 
 // ===== GLOBAL VARIABLES =====
-char g_board[9]{
+constexpr int kNumberOfBoxes{9};
+
+char g_board[kNumberOfBoxes]{
     ' ', ' ', ' ',
     ' ', ' ', ' ',
     ' ', ' ', ' '};
+
 
 char g_turn{'X'};
 
@@ -14,7 +17,7 @@ bool g_game_over{false};
 int g_x_score{0};
 int g_o_score{0};
 
-QPushButton *g_boxes[9];
+QPushButton *g_boxes[kNumberOfBoxes];
 // ============================
 
 TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
@@ -22,7 +25,7 @@ TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
 {
     ui->setupUi(this);
 
-    for (int i{0}; i < 9; ++i)
+    for (int i{0}; i < kNumberOfBoxes; ++i)
     {
         const QString kButtonName{"pushButton_" + QString::number(i + 1)};
         g_boxes[i] = TicTacToe::findChild<QPushButton *>(kButtonName);
@@ -134,7 +137,7 @@ void TicTacToe::NewGame()
         box->setText("");
     }
 
-    for (int i{0}; i < 9; ++i)
+    for (int i{0}; i < kNumberOfBoxes; ++i)
     {
         g_board[i] = ' ';
     }

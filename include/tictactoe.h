@@ -23,7 +23,6 @@ private:
 
 private slots:
     void BoxPressed();
-    char GetWinner();
     void NewGame();
 };
 

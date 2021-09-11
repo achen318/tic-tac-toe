@@ -4,8 +4,6 @@
 
 Game game{};
 
-QPushButton *g_boxes[9];
-
 TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
                                         ui(new Ui::TicTacToe)
 {
@@ -14,9 +12,13 @@ TicTacToe::TicTacToe(QWidget *parent) : QMainWindow(parent),
     for (int i{0}; i < 9; ++i)
     {
         const QString kButtonName{"pushButton_" + QString::number(i + 1)};
-        g_boxes[i] = TicTacToe::findChild<QPushButton *>(kButtonName);
-        connect(g_boxes[i], SIGNAL(released()), this, SLOT(BoxPressed()));
+        QPushButton *box = TicTacToe::findChild<QPushButton *>(kButtonName);
+
+        game.append_to_board(box);
+        connect(box, SIGNAL(released()), this, SLOT(BoxPressed()));
     }
+
+    game.NewGame();
 
     connect(ui->newGameButton, SIGNAL(released()), this, SLOT(NewGame()));
 }
@@ -29,16 +31,14 @@ TicTacToe::~TicTacToe()
 void TicTacToe::BoxPressed()
 {
     QPushButton *button{(QPushButton *)sender()};
-
     const int kIndex{button->objectName().back().digitValue() - 1};
 
     // Proceed only if the box is empty and the game is not over
-    if (game.box(kIndex) == ' ' && !game.game_over())
+    if (game.box(kIndex) == '\0' && !game.game_over())
     {
         QLabel *turn_label{ui->turnLabel};
 
         // Update box in both the button and array
-        button->setText(QString(game.turn()));
         game.set_box(kIndex, game.turn());
 
         // Check for a winner
@@ -85,11 +85,6 @@ void TicTacToe::BoxPressed()
 
 void TicTacToe::NewGame()
 {
-    for (QPushButton *box : g_boxes)
-    {
-        box->setText("");
-    }
-
     game.NewGame();
 
     ui->turnLabel->setText("It is currently X's turn!");

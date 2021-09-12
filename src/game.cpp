@@ -1,9 +1,13 @@
 #include "include/game.h"
 
-// Accessors
 QList<QPushButton *> Game::board()
 {
     return board_;
+}
+
+void Game::append_to_board(QPushButton *box)
+{
+    board_.append(box);
 }
 
 char Game::box(int index)
@@ -11,9 +15,19 @@ char Game::box(int index)
     return board_.at(index)->text().toStdString()[0];
 }
 
+void Game::set_box(int index, char value)
+{
+    board_[index]->setText(QString(value));
+}
+
 char Game::turn()
 {
     return turn_;
+}
+
+void Game::set_turn(char turn)
+{
+    turn_ = turn;
 }
 
 bool Game::game_over()
@@ -21,47 +35,21 @@ bool Game::game_over()
     return game_over_;
 }
 
-int Game::x_score()
+void Game::set_game_over(bool game_over)
 {
-    return x_score_;
+    game_over_ = game_over;
 }
 
-int Game::o_score()
+int Game::get_and_increment_x_score()
 {
-    return o_score_;
+    return ++x_score_;
 }
 
-// Mutators
-void Game::append_to_board(QPushButton *box)
+int Game::get_and_increment_o_score()
 {
-    board_.append(box);
+    return ++o_score_;
 }
 
-void Game::set_box(int index, char value)
-{
-    board_[index]->setText(QString(value));
-}
-
-void Game::switch_turn()
-{
-    turn_ = (turn_ == 'X') ? 'O' : 'X';
-}
-
-void Game::set_game_over(bool game_state)
-{
-    game_over_ = game_state;
-}
-
-void Game::increment_x_score()
-{
-    ++x_score_;
-}
-void Game::increment_o_score()
-{
-    ++o_score_;
-}
-
-// Other member functions
 void Game::NewGame()
 {
     for (int i{0}; i < 9; ++i)
@@ -69,7 +57,8 @@ void Game::NewGame()
         set_box(i, '\0');
     }
 
-    turn_ = 'X';
+    set_turn('X');
+    set_game_over(false);
 }
 
 char Game::GetWinner()

@@ -59,14 +59,12 @@ void TicTacToe::BoxPressed()
                 if (kWinner == 'X')
                 {
                     score_label = ui->xScoreLabel;
-                    game.increment_x_score();
-                    player_score = game.x_score();
+                    player_score = game.get_and_increment_x_score();
                 }
                 else
                 {
                     score_label = ui->oScoreLabel;
-                    game.increment_o_score();
-                    player_score = game.o_score();
+                    player_score = game.get_and_increment_o_score();
                 }
 
                 score_label->setText(QString(kWinner) + ": " + QString::number(player_score));
@@ -78,7 +76,7 @@ void TicTacToe::BoxPressed()
         }
 
         // Switch player turn
-        game.switch_turn();
+        game.set_turn((game.turn() == 'X') ? 'O' : 'X');
         turn_label->setText("It is currently " + QString(game.turn()) + "'s turn!");
     }
 }
@@ -86,8 +84,5 @@ void TicTacToe::BoxPressed()
 void TicTacToe::NewGame()
 {
     game.NewGame();
-
     ui->turnLabel->setText("It is currently X's turn!");
-
-    game.set_game_over(false);
 }

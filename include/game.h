@@ -7,35 +7,9 @@ class Game
 {
 public:
     /**
-     * @returns A QList of QPushButton pointers.
+     * @returns a QList of QPushButton pointers.
      */
     QList<QPushButton *> board();
-
-    /**
-     * @param index An integer value between 0 and 8.
-     * @returns The QPushButton text ('X', 'O', '\\0') that is at index in board().
-     */
-    char box(int index);
-
-    /**
-     * @returns The current player ('X', 'O').
-     */
-    char turn();
-
-    /**
-     * @returns Whether or not the game is over.
-     */
-    bool game_over();
-
-    /**
-     * @returns Integer score of player X.
-     */
-    int x_score();
-
-    /**
-     * @returns Integer score of player O.
-     */
-    int o_score();
 
     /**
      * @brief Add a QPushButton pointer to board().
@@ -47,6 +21,12 @@ public:
     void append_to_board(QPushButton *box);
 
     /**
+     * @param index An integer value between 0 and 8.
+     * @returns the QPushButton text ('X', 'O', '\\0') that is at index in board().
+     */
+    char box(int index);
+
+    /**
      * @brief Set the text for the box at the given index in board().
      * 
      * @param index An integer value between 0 and 8.
@@ -55,26 +35,42 @@ public:
     void set_box(int index, char value);
 
     /**
-     * @brief Alternate player_turn() between player X and O.
+     * @returns the current player ('X', 'O').
      */
-    void switch_turn();
+    char turn();
+
+    /**
+     * @brief Set turn() to turn.
+     * 
+     * @param turn The char value ('X', 'O') of the new player turn.
+     */
+    void set_turn(char turn);
+
+    /**
+     * @returns whether or not the game is over.
+     */
+    bool game_over();
 
     /**
      * @brief Set the game_over() value to be true or false.
      * 
-     * @param game_state Whether or not the game is over.
+     * @param game_over Whether or not the game is over.
      */
-    void set_game_over(bool game_state);
+    void set_game_over(bool game_over);
 
     /**
-     * @brief Add 1 to x_score().
+     * @brief Add 1 to x_score and return it.
+     * 
+     * @returns int the integer value of player X.
      */
-    void increment_x_score();
+    int get_and_increment_x_score();
 
     /**
-     * @brief Add 1 to o_score().
+     * @brief Add 1 to o_score and return it.
+     * 
+     * @returns int the integer value of player O.
      */
-    void increment_o_score();
+    int get_and_increment_o_score();
 
     /**
      * @brief Clear the board and set player_turn() to 'X'.
@@ -84,7 +80,7 @@ public:
     /**
      * @brief Get the Winner object
      * 
-     * @returns The winning player ('X', 'O').
+     * @returns the winning player ('X', 'O').
      */
     char GetWinner();
 

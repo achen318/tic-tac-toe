@@ -42,21 +42,22 @@ void TicTacToe::BoxPressed()
         game.set_box(kIndex, game.turn());
 
         // Check for a winner
-        const char kWinner{game.GetWinner()};
+        Winner winner{game.GetWinner()};
+        const char kWinningChar{winner.winner};
 
-        if (kWinner != 'N')
+        if (kWinningChar != 'N')
         {
-            if (kWinner == 'D')
+            if (kWinningChar == 'D')
                 turn_label->setText("It is a draw!");
             else
             {
-                turn_label->setText("Congratulations! " + QString(kWinner) + " won!");
+                turn_label->setText("Congratulations! " + QString(kWinningChar) + " won!");
 
                 // Add to player score
                 QLabel *score_label{};
                 int player_score{};
 
-                if (kWinner == 'X')
+                if (kWinningChar == 'X')
                 {
                     score_label = ui->xScoreLabel;
                     player_score = game.get_and_increment_x_score();
@@ -67,7 +68,7 @@ void TicTacToe::BoxPressed()
                     player_score = game.get_and_increment_o_score();
                 }
 
-                score_label->setText(QString(kWinner) + ": " + QString::number(player_score));
+                score_label->setText(QString(kWinningChar) + ": " + QString::number(player_score));
             }
 
             // Prevent the game from continuing

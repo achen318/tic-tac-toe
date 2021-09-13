@@ -1,6 +1,6 @@
 #include "include/game.h"
 
-QList<QPushButton *> Game::board()
+Box Game::board()
 {
     return board_;
 }
@@ -61,37 +61,64 @@ void Game::NewGame()
     set_game_over(false);
 }
 
-char Game::GetWinner()
+Winner Game::GetWinner()
 {
-    for (int i{0}; i <= 2; ++i)
+    Winner winner;
+
+    QList<Box> possible_arrs{
+        // rows
+        GetBox(0, 1, 2),
+        GetBox(3, 4, 5),
+        GetBox(6, 7, 8),
+
+        // columns
+        GetBox(0, 3, 6),
+        GetBox(1, 4, 7),
+        GetBox(2, 5, 8),
+
+        // diagonals
+        GetBox(0, 4, 8),
+        GetBox(2, 4, 6),
+    };
+
+    for (Box arr : possible_arrs)
     {
-        // Check if any of the rows are the same
-        const char kCenterRow{box(3 * i + 1)};
+        if (arr[0]->text() != '\0' && AreContentEqual(arr))
+        {
+            winner.winner = turn();
+            winner.winning_combos.append(arr);
 
-        if (kCenterRow != '\0' && box(3 * i) == kCenterRow && kCenterRow == box(3 * i + 2))
-            return turn_;
-
-        // Check if any of the columns are the same
-        const char kCenterCol{box(i + 3)};
-
-        if (kCenterCol != '\0' && box(i) == kCenterCol && kCenterCol == box(i + 6))
-            return turn_;
+            return winner;
+        }
     }
-
-    // Check if any of the diagonals are the same
-    const char kCenterDiag{box(4)};
-
-    if (kCenterDiag != '\0' &&
-        ((box(0) == kCenterDiag && kCenterDiag == box(8)) || (box(2) == kCenterDiag && kCenterDiag == box(6))))
-        return turn_;
 
     // Check if the game is still ongoing
     for (int i{0}; i < 9; ++i)
     {
         if (box(i) == '\0')
-            return 'N';
+        {
+            winner.winner = 'N';
+            return winner;
+        }
     }
 
     // There are no winners, end the game in a draw
-    return 'D';
+    winner.winner = 'D';
+    return winner;
+}
+
+Box Game::GetBox(int a, int b, int c)
+{
+    Box box{};
+
+    box.append(board_.at(a));
+    box.append(board_.at(b));
+    box.append(board_.at(c));
+
+    return box;
+}
+
+bool Game::AreContentEqual(Box arr)
+{
+    return arr[0]->text() == arr[1]->text() && arr[1]->text() == arr[2]->text();
 }

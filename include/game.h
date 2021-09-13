@@ -3,13 +3,21 @@
 
 #include "ui_tictactoe.h"
 
+using Box = QList<QPushButton *>;
+
+struct Winner
+{
+    char winner{};
+    QList<Box> winning_combos{};
+};
+
 class Game
 {
 public:
     /**
      * @returns a QList of QPushButton pointers.
      */
-    QList<QPushButton *> board();
+    Box board();
 
     /**
      * @brief Add a QPushButton pointer to board().
@@ -61,14 +69,14 @@ public:
     /**
      * @brief Add 1 to x_score and return it.
      * 
-     * @returns int the integer value of player X.
+     * @returns the integer value of player X.
      */
     int get_and_increment_x_score();
 
     /**
      * @brief Add 1 to o_score and return it.
      * 
-     * @returns int the integer value of player O.
+     * @returns the integer value of player O.
      */
     int get_and_increment_o_score();
 
@@ -78,14 +86,32 @@ public:
     void NewGame();
 
     /**
-     * @brief Get the Winner object
+     * @brief Return the winning player (or none) and the boxes that resulted in the win.
      * 
-     * @returns the winning player ('X', 'O').
+     * @returns a Winner struct consisting of a winner char and the winning combos.
      */
-    char GetWinner();
+    Winner GetWinner();
 
 private:
-    QList<QPushButton *> board_{};
+    /**
+     * @brief Return a QList of QPushButton pointers out of 3 indices.
+     * 
+     * @param a the first index.
+     * @param b the second index.
+     * @param c the third index.
+     * @returns a QList of QPushButton pointers.
+     */
+    Box GetBox(int a, int b, int c);
+
+    /**
+     * @brief Check if the text of an array's elements are equal.
+     * 
+     * @param arr a QList of QPushButton pointers.
+     * @returns whether or not the text in all of the QPushButtons are equal.
+     */
+    bool AreContentEqual(Box arr);
+
+    Box board_{};
 
     char turn_{'X'};
 
